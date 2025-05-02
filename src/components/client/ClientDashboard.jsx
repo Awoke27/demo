@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { FaHome, FaComments, FaUser, FaStar, FaCalendarAlt, FaHeart } from "react-icons/fa";
 import logo from "../../assets/logo.png";
-import profileImage from "../../assets/Awoke.jpg";
+import profileImage from "../../assets/client.png";
 import styles from "./ClientDashboard.module.css"; // Import the CSS module
 
 const ClientDashboard = () => {
