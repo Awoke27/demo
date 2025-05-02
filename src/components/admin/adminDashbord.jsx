@@ -1,108 +1,124 @@
-import React from "react";
+import React, { useState } from "react";
 import { FaUsers, FaHome, FaMoneyBill, FaEnvelope, FaChartBar, FaCogs, FaTachometerAlt, FaClipboardCheck, FaBoxOpen } from "react-icons/fa";
+import { Bar } from "react-chartjs-2";
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from "chart.js";
+import logo from "../../assets/logo.png";
+import profileImage from "../../assets/Awoke.jpg";
+import styles from "./adminDashbord.module.css"; // Import the CSS module
+
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 const AdminDashboard = () => {
+  const [activeItem, setActiveItem] = useState("Dashboard");
+
+  const chartData = {
+    labels: ["ተጠቃሚዎች", "ንብረቶች", "የደንበኝነት ምዝገባዎች", "ጥያቄዎች"],
+    datasets: [
+      {
+        label: "የፕላትፎርም መለኪያዎች",
+        data: [53, 230, 89, 112],
+        backgroundColor: ["#3498db", "#1abc9c", "#27ae60", "#9b59b6"],
+      },
+    ],
+  };
+
+  const chartOptions = {
+    responsive: true,
+    plugins: {
+      legend: { position: "bottom" },
+      title: { display: true, text: "የስርዓት አጠቃላይ እይታ" },
+    },
+  };
+
+  const renderNavItem = (label, icon, color) => (
+    <li
+      onClick={() => setActiveItem(label)}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.transform = "translateX(5px)";
+        e.currentTarget.style.boxShadow = "inset 4px 0 0 #00FF88";
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.transform = "none";
+        e.currentTarget.style.boxShadow = "none";
+      }}
+      className={`${styles.navItem} ${activeItem === label ? styles.activeNavItem : ""}`}
+    >
+      {React.cloneElement(icon, { style: { color } })} {label}
+    </li>
+  );
+
   return (
-    <div style={{ display: "flex", height: "100vh", fontFamily: "sans-serif" }}>
+    <div className={styles.dashboardContainer}>
       {/* Sidebar */}
-      <aside style={{ width: "250px", background: "#0d1b2a", color: "white", padding: "2rem 1rem" }}>
-        <div style={{ textAlign: "center", marginBottom: "2rem" }}>
-          <img src="https://via.placeholder.com/60" alt="Profile" style={{ borderRadius: "50%" }} />
-          <h3 style={{ marginTop: "1rem" }}>Awoke Sisay</h3>
-          <p style={{ color: "#00FF88" }}>● Online</p>
+      <aside className={styles.sidebar}>
+        <div className={styles.profileSection}>
+          <img src={profileImage} alt="Profile" className={styles.profileImage} />
+          <h3 className={styles.profileName}>Awoke Sisay</h3>
+          <p className={styles.onlineStatus}>● Online</p>
         </div>
-        <hr style={{ borderColor: "#ffffff33", margin: "1rem 0" }} />
-        <nav>
-          <ul style={{ listStyle: "none", padding: 0 }}>
-            <li style={navItem}><FaTachometerAlt style={{ ...iconStyle, color: "#f39c12" }} /> Dashboard</li>
-            <li style={navItem}><FaUsers style={{ ...iconStyle, color: "#3498db" }} /> User Management</li>
-            <li style={navItem}><FaHome style={{ ...iconStyle, color: "#1abc9c" }} /> Property Listings</li>
-            <li style={navItem}><FaMoneyBill style={{ ...iconStyle, color: "#27ae60" }} /> Subscription Management</li>
-            <li style={navItem}><FaEnvelope style={{ ...iconStyle, color: "#9b59b6" }} /> Messaging & Inquiries</li>
-            <li style={navItem}><FaClipboardCheck style={{ ...iconStyle, color: "#8e44ad" }} /> Approvals</li>
-            <li style={navItem}><FaBoxOpen style={{ ...iconStyle, color: "#16a085" }} /> Orders</li>
-            <li style={navItem}><FaChartBar style={{ ...iconStyle, color: "#e67e22" }} /> Reports & Analytics</li>
-            <li style={navItem}><FaCogs style={{ ...iconStyle, color: "#e74c3c" }} /> Settings</li>
+        <hr className={styles.divider} />
+        <nav className={styles.nav}>
+          <ul className={styles.navList}>
+            {renderNavItem("ዳሽቦርድ", <FaTachometerAlt />, "#f39c12")}
+            {renderNavItem("የተጠቃሚ አስተዳደር", <FaUsers />, "#3498db")}
+            {renderNavItem("የንብረት ዝርዝሮች", <FaHome />, "#1abc9c")}
+            {renderNavItem("የደንበኝነት ምዝገባ አስተዳደር", <FaMoneyBill />, "#27ae60")}
+            {renderNavItem("መላላኪያ እና መጠይቆች", <FaEnvelope />, "#9b59b6")}
+            {renderNavItem("ማጽደቂያዎች", <FaClipboardCheck />, "#8e44ad")}
+            {renderNavItem("ትዕዛዞች", <FaBoxOpen />, "#16a085")}
+            {renderNavItem("ዘገባዎች እና ትንታኔዎች", <FaChartBar />, "#e67e22")}
+            {renderNavItem("መቼቶች", <FaCogs />, "#e74c3c")}
           </ul>
         </nav>
       </aside>
 
       {/* Main Content */}
-      <div style={{ flex: 1, backgroundColor: "#f4f6f9" }}>
+      <div className={styles.mainContent}>
         {/* Header */}
-        <header style={headerStyle}>
-          <h2 style={{ margin: 0 }}>Home Agent - Admin Panel</h2>
-          <div style={{ display: "flex", alignItems: "center", gap: "1.5rem" }}>
-            <img src="https://via.placeholder.com/40" alt="User" style={{ borderRadius: "50%" }} />
+        <header className={styles.header}>
+          <div className={styles.headerLeft}>
+            <img src={logo} alt="Logo" className={styles.logo} />
+            <h2 className={styles.headerTitle}>የአስተዳዳሪ ፓነል</h2>
+          </div>
+          <div className={styles.headerRight}>
+            <img src={profileImage} alt="User" className={styles.userImage} />
           </div>
         </header>
 
         {/* Dashboard Widgets */}
-        <section style={cardContainer}>
-          <div style={cardStyle}>
-            <div style={{ fontSize: "1.4rem", fontWeight: "bold" }}>53</div>
-            <div style={{ color: "#777" }}>New Users</div>
+        <section className={styles.cardContainer}>
+          <div className={styles.card}>
+            <FaUsers style={{ fontSize: "1.5rem", color: "#3498db" }} />
+            <div className={styles.cardValue}>53</div>
+            <div className={styles.cardLabel}>አዲስ ተጠቃሚዎች</div>
           </div>
-          <div style={cardStyle}>
-            <div style={{ fontSize: "1.4rem", fontWeight: "bold" }}>230</div>
-            <div style={{ color: "#777" }}>Listed Properties</div>
+          <div className={styles.card}>
+            <FaHome style={{ fontSize: "1.5rem", color: "#1abc9c" }} />
+            <div className={styles.cardValue}>230</div>
+            <div className={styles.cardLabel}>የተዘረዘሩ ንብረቶች</div>
           </div>
-          <div style={cardStyle}>
-            <div style={{ fontSize: "1.4rem", fontWeight: "bold" }}>89</div>
-            <div style={{ color: "#777" }}>Active Subscriptions</div>
+          <div className={styles.card}>
+            <FaMoneyBill style={{ fontSize: "1.5rem", color: "#27ae60" }} />
+            <div className={styles.cardValue}>89</div>
+            <div className={styles.cardLabel}>ንቁ የደንበኝነት ምዝገባዎች</div>
           </div>
-          <div style={cardStyle}>
-            <div style={{ fontSize: "1.4rem", fontWeight: "bold" }}>112</div>
-            <div style={{ color: "#777" }}>Total Inquiries</div>
+          <div className={styles.card}>
+            <FaEnvelope style={{ fontSize: "1.5rem", color: "#9b59b6" }} />
+            <div className={styles.cardValue}>112</div>
+            <div className={styles.cardLabel}>ጠቅላላ መተይቆች</div>
           </div>
         </section>
 
-        {/* Chart Placeholder */}
-        <section style={{ padding: "2rem" }}>
-          <h3>Platform Analytics</h3>
-          <div style={{ background: "white", padding: "2rem", borderRadius: "10px", minHeight: "200px" }}>
-            <p style={{ color: "#aaa" }}>Analytics Chart Placeholder</p>
+        {/* Chart Section */}
+        <section className={styles.chartSection}>
+          <h3 className={styles.chartTitle}>የፕላትፎርም ትንታኔ</h3>
+          <div className={styles.chartContainer}>
+            <Bar data={chartData} options={chartOptions} />
           </div>
         </section>
       </div>
     </div>
   );
-};
-
-const navItem = {
-  display: "flex",
-  alignItems: "center",
-  gap: "1rem",
-  padding: "1rem 0",
-  fontSize: "1.2rem",
-  cursor: "pointer",
-};
-
-const iconStyle = {
-  fontSize: "1.2rem",
-};
-
-const headerStyle = {
-  background: "#112B3C",
-  color: "white",
-  padding: "1rem 2rem",
-  display: "flex",
-  justifyContent: "space-between",
-  alignItems: "center",
-};
-
-const cardContainer = {
-  display: "grid",
-  gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))",
-  gap: "1rem",
-  padding: "2rem",
-};
-
-const cardStyle = {
-  backgroundColor: "white",
-  padding: "1.5rem",
-  borderRadius: "10px",
-  textAlign: "center",
 };
 
 export default AdminDashboard;

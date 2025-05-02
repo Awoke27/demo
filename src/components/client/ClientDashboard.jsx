@@ -1,42 +1,76 @@
-import React from "react";
-import { FaHome, FaBell, FaComments, FaUser, FaStar } from "react-icons/fa";
+import React, { useState } from "react";
+import { FaHome, FaComments, FaUser, FaStar, FaCalendarAlt, FaHeart } from "react-icons/fa";
+import logo from "../../assets/logo.png";
+import profileImage from "../../assets/Awoke.jpg";
+import styles from "./ClientDashboard.module.css"; // Import the CSS module
 
 const ClientDashboard = () => {
+  const [activeItem, setActiveItem] = useState("Browse Properties");
+
+  const renderNavItem = (label, icon, color) => (
+    <li
+      onClick={() => setActiveItem(label)}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.transform = "translateX(5px)";
+        e.currentTarget.style.boxShadow = "inset 4px 0 0 #00FF88";
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.transform = "none";
+        e.currentTarget.style.boxShadow = "none";
+      }}
+      className={`${styles.navItem} ${activeItem === label ? styles.activeNavItem : ""}`}
+    >
+      {React.cloneElement(icon, { style: { color } })} {label}
+    </li>
+  );
+
   return (
-    <div style={{ display: "flex", height: "100vh", fontFamily: "sans-serif" }}>
+    <div className={styles.dashboardContainer}>
       {/* Sidebar */}
-      <aside style={{ width: "230px", background: "#2c3e50", color: "white", padding: "2rem 1rem" }}>
-        <div style={{ textAlign: "center", marginBottom: "2rem" }}>
-          <img src="https://via.placeholder.com/60" alt="Client" style={{ borderRadius: "50%" }} />
-          <h3 style={{ marginTop: "1rem" }}>Client Name</h3>
+      <aside className={styles.sidebar}>
+        <div className={styles.profileSection}>
+          <img src={profileImage} alt="Client" className={styles.profileImage} />
+          <h3 className={styles.profileName}>Client Name</h3>
+          <p className={styles.onlineStatus}>● Online</p>
         </div>
-        <hr style={{ borderColor: "#ffffff33", margin: "1rem 0" }} />
-        <nav>
-          <ul style={{ listStyle: "none", padding: 0 }}>
-            <li style={navItem}><FaHome style={{ ...iconStyle, color: "#1abc9c" }} /> Browse Properties</li>
-            <li style={navItem}><FaComments style={{ ...iconStyle, color: "#f39c12" }} /> Messages</li>
-            <li style={navItem}><FaStar style={{ ...iconStyle, color: "#f1c40f" }} /> Reviews & Ratings</li>
-            <li style={navItem}><FaUser style={{ ...iconStyle, color: "#bdc3c7" }} /> Profile</li>
+        <hr className={styles.divider} />
+        <nav className={styles.nav}>
+          <ul className={styles.navList}>
+            {renderNavItem("Browse Properties", <FaHome />, "#1abc9c")}
+            {renderNavItem("Messages", <FaComments />, "#f39c12")}
+            {renderNavItem("Reviews & Ratings", <FaStar />, "#f1c40f")}
+            {renderNavItem("Profile", <FaUser />, "#bdc3c7")}
+            {renderNavItem("Booking Property Visits", <FaCalendarAlt />, "#e74c3c")}
+            {renderNavItem("Saved Properties", <FaHeart />, "#e84393")}
           </ul>
         </nav>
       </aside>
 
       {/* Main Content */}
-      <div style={{ flex: 1, backgroundColor: "#ecf0f1" }}>
-        <header style={headerStyle}>
-          <h2 style={{ margin: 0 }}>Home Agent - Client Panel</h2>
+      <div className={styles.mainContent}>
+        <header className={styles.header}>
+          <div className={styles.headerLeft}>
+            <img src={logo} alt="Logo" className={styles.logo} />
+            <h2 className={styles.headerTitle}>Client Panel</h2>
+          </div>
+          <div className={styles.headerRight}>
+            <img src={profileImage} alt="Client" className={styles.userImage} />
+          </div>
         </header>
 
-        <section style={cardContainer}>
-          <div style={cardStyle}>
+        <section className={styles.cardContainer}>
+          <div className={`${styles.card} ${styles.cardHover}`}>
+            <FaHome style={{ fontSize: "2rem", color: "#1abc9c", marginBottom: "0.5rem" }} />
             <h3>Browse Properties</h3>
             <p>Explore available listings by location, type, or price.</p>
           </div>
-          <div style={cardStyle}>
+          <div className={`${styles.card} ${styles.cardHover}`}>
+            <FaComments style={{ fontSize: "2rem", color: "#f39c12", marginBottom: "0.5rem" }} />
             <h3>Inbox</h3>
             <p>Chat with property owners or agents securely.</p>
           </div>
-          <div style={cardStyle}>
+          <div className={`${styles.card} ${styles.cardHover}`}>
+            <FaStar style={{ fontSize: "2rem", color: "#f1c40f", marginBottom: "0.5rem" }} />
             <h3>Leave a Review</h3>
             <p>Share feedback after a property visit.</p>
           </div>
@@ -44,42 +78,6 @@ const ClientDashboard = () => {
       </div>
     </div>
   );
-};
-
-const navItem = {
-  display: "flex",
-  alignItems: "center",
-  gap: "1rem",
-  padding: "1rem 0",
-  fontSize: "1.1rem",
-  cursor: "pointer",
-};
-
-const iconStyle = {
-  fontSize: "1.2rem",
-};
-
-const headerStyle = {
-  background: "#34495e",
-  color: "white",
-  padding: "1rem 2rem",
-  display: "flex",
-  alignItems: "center",
-};
-
-const cardContainer = {
-  display: "grid",
-  gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
-  gap: "1rem",
-  padding: "2rem",
-};
-
-const cardStyle = {
-  backgroundColor: "white",
-  padding: "1.5rem",
-  borderRadius: "10px",
-  textAlign: "center",
-  boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
 };
 
 export default ClientDashboard;
